@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, ShoppingCart, Wallet, User, Settings, LayoutDashboard } from "lucide-react"
+import { Home, ShoppingCart, Wallet, User, Settings, LayoutDashboard, Package } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface DashboardNavProps {
@@ -16,7 +16,7 @@ export default function DashboardNav({ user }: DashboardNavProps) {
 
   const userLinks = [
     { href: "/dashboard", label: "Tổng quan", icon: Home },
-    { href: "/dashboard/products", label: "Sản phẩm", icon: ShoppingCart },
+    { href: "/dashboard/products", label: "Sản phẩm", icon: Package },
     { href: "/dashboard/orders", label: "Đơn hàng", icon: ShoppingCart },
     { href: "/dashboard/wallet", label: "Ví tiền", icon: Wallet },
     { href: "/dashboard/profile", label: "Tài khoản", icon: User },
