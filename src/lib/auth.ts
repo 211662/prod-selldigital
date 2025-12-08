@@ -1,38 +1,9 @@
-import NextAuth, { DefaultSession, NextAuthConfig } from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
-import { Role } from "@prisma/client"
 
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string
-      role: Role
-    } & DefaultSession["user"]
-  }
-
-  interface User {
-    role: Role
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    id: string
-    role: Role
-  }
-}
-
-export const authConfig: NextAuthConfig = {
-  adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/login",
-  },
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -42,24 +13,24 @@ export const authConfig: NextAuthConfig = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email và mật khẩu là bắt buộc")
+          return null
         }
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
+          where: { email: credentials.email },
         })
 
         if (!user || !user.password) {
-          throw new Error("Email hoặc mật khẩu không đúng")
+          return null
         }
 
         const isCorrectPassword = await bcrypt.compare(
-          credentials.password as string,
+          credentials.password,
           user.password
         )
 
         if (!isCorrectPassword) {
-          throw new Error("Email hoặc mật khẩu không đúng")
+          return null
         }
 
         return {
@@ -67,11 +38,16 @@ export const authConfig: NextAuthConfig = {
           email: user.email,
           name: user.name,
           role: user.role,
-          image: user.image,
         }
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -81,13 +57,14 @@ export const authConfig: NextAuthConfig = {
       return token
     },
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id
-        session.user.role = token.role
+      if (session.user) {
+        session.user.id = token.id as string
+        session.user.role = token.role as string
       }
       return session
     },
   },
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
+export default NextAuth(authOptions)
+
