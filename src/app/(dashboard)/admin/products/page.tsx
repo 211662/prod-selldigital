@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Plus, Edit, Trash2, Package } from "lucide-react"
 import DeleteProductButton from "@/components/admin/delete-product-button"
+import ToggleProductStatusButton from "@/components/admin/toggle-product-status-button"
 
 export default async function AdminProductsPage() {
   const products = await prisma.product.findMany({
@@ -53,6 +54,11 @@ export default async function AdminProductsPage() {
                         Ẩn
                       </span>
                     )}
+                    {product._count.accounts === 0 && (
+                      <span className="bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded">
+                        Hết hàng
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-gray-600 mb-3">{product.category.name}</p>
                   <div className="flex items-center gap-6 text-sm">
@@ -82,6 +88,10 @@ export default async function AdminProductsPage() {
                       Tài khoản
                     </Button>
                   </Link>
+                  <ToggleProductStatusButton
+                    productId={product.id}
+                    isActive={product.isActive}
+                  />
                   <Link href={`/admin/products/${product.id}/edit`}>
                     <Button variant="outline" size="sm">
                       <Edit className="w-4 h-4" />

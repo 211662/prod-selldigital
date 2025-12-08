@@ -25,6 +25,7 @@ export default function DashboardNav({ user }: DashboardNavProps) {
   const adminLinks = [
     { href: "/admin", label: "Admin", icon: LayoutDashboard },
     { href: "/admin/products", label: "Quản lý sản phẩm", icon: Package },
+    { href: "/admin/categories", label: "Quản lý danh mục", icon: LayoutDashboard },
     { href: "/admin/orders", label: "Quản lý đơn hàng", icon: ShoppingCart },
     { href: "/admin/deposits", label: "Yêu cầu nạp tiền", icon: Wallet },
     { href: "/admin/users", label: "Quản lý người dùng", icon: User },
