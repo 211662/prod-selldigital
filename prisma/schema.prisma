@@ -25,6 +25,7 @@ model User {
 
   orders        Order[]
   transactions  Transaction[]
+  deposits      Deposit[]
   affiliate     Affiliate?
   referrals     Referral[]
   reviews       Review[]
@@ -137,6 +138,24 @@ model OrderItem {
 // =====================
 // WALLET & TRANSACTIONS
 // =====================
+
+model Deposit {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  amount      Float
+  status      String   @default("PENDING")
+  note        String?
+  proofImage  String?
+  processedBy String?
+  processedAt DateTime?
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+}
 
 model Transaction {
   id            String   @id @default(cuid())

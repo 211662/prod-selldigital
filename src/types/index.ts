@@ -1,5 +1,3 @@
-import { Role } from "@prisma/client"
-
 export interface ApiResponse<T = any> {
   success: boolean
   data?: T
@@ -36,6 +34,6 @@ export interface UserSession {
   id: string
   email: string
   name?: string | null
-  role: Role
+  role: string
   image?: string | null
 }
