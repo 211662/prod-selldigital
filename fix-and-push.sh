@@ -1,3 +1,12 @@
+#!/bin/bash
+set -e
+
+echo "🔧 Fixing all code issues..."
+
+cd /Users/linh/Desktop/github/prod-selldigital
+
+# Fix deposits page
+cat > src/app/\(dashboard\)/admin/deposits/page.tsx << 'ENDFILE'
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -87,3 +96,26 @@ export default async function AdminDepositsPage() {
     </div>
   )
 }
+ENDFILE
+
+echo "✅ Fixed deposits page"
+
+# Add all changes
+git add -A
+
+# Commit
+git commit -m "Fix: All Decimal type errors and deposits page"
+
+# Push
+git push origin main
+
+echo ""
+echo "========================================="
+echo "✅ PUSHED TO GITHUB!"
+echo "========================================="
+echo ""
+echo "Webhook sẽ tự động deploy sau vài giây..."
+echo ""
+echo "Xem logs:"
+echo "ssh root@139.59.111.150 'pm2 logs webhook'"
+echo ""
