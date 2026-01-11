@@ -4,7 +4,9 @@ import WelcomeEmail from "@/emails/welcome"
 import OrderConfirmationEmail from "@/emails/order-confirmation"
 import DepositConfirmationEmail from "@/emails/deposit-confirmation"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY 
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null
 
 export async function POST(request: NextRequest) {
   try {
@@ -54,6 +56,15 @@ export async function POST(request: NextRequest) {
           { error: "Invalid email type" },
           { status: 400 }
         )
+    }
+
+    // Check if Resend is configured
+    if (!resend) {
+      console.warn("Resend API key not configured. Email not sent.")
+      return NextResponse.json({ 
+        success: true, 
+        message: "Email would be sent (Resend not configured)" 
+      })
     }
 
     const { data: emailData, error } = await resend.emails.send({
