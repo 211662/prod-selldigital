@@ -28,6 +28,8 @@ model User {
   affiliate     Affiliate?
   referrals     Referral[]
   reviews       Review[]
+  posts         Post[]
+  comments      Comment[]
   
   @@index([email])
 }
@@ -281,6 +283,119 @@ model Review {
 }
 
 // =====================
+// BLOG SYSTEM
+// =====================
+
+model Post {
+  id              String        @id @default(cuid())
+  title           String
+  slug            String        @unique
+  excerpt         String?       @db.Text
+  content         String        @db.Text
+  featuredImage   String?
+  status          PostStatus    @default(DRAFT)
+  published       Boolean       @default(false)
+  publishedAt     DateTime?
+  viewCount       Int           @default(0)
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?       @db.Text
+  metaKeywords    String?
+  
+  // Relations
+  authorId        String
+  author          User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categoryId      String
+  category        PostCategory  @relation(fields: [categoryId], references: [id])
+  tags            PostTag[]
+  comments        Comment[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([slug])
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([published])
+  @@index([publishedAt])
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model PostCategory {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?  @db.Text
+  image       String?
+  order       Int      @default(0)
+  posts       Post[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([slug])
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  posts     PostTag[]
+  
+  createdAt DateTime  @default(now())
+  
+  @@index([slug])
+}
+
+model PostTag {
+  postId    String
+  tagId     String
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag       Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, tagId])
+  @@index([postId])
+  @@index([tagId])
+}
+
+model Comment {
+  id        String         @id @default(cuid())
+  content   String         @db.Text
+  status    CommentStatus  @default(PENDING)
+  
+  postId    String
+  post      Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  parentId  String?
+  parent    Comment?       @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[]      @relation("CommentReplies")
+  
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  
+  @@index([postId])
+  @@index([userId])
+  @@index([status])
+  @@index([parentId])
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  SPAM
+  TRASH
+}
+
+// =====================
 // SYSTEM SETTINGS
 // =====================
 
@@ -293,3 +408,4 @@ model Settings {
   
   @@index([key])
 }
+
