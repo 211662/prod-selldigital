@@ -41,28 +41,30 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-6xl mx-auto px-4 py-16">
-        <div className="text-center mb-16"
-        <h1 className="text-5xl font-bold text-gray-900 mb-6">
-          SellDigital
-        </h1>
-        <p className="text-xl text-gray-600 mb-8">
-          Nền tảng bán tài khoản số tự động - Uy tín, An toàn, Nhanh chóng
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Link
-            href="/login"
-            className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
-          >
-            Đăng nhập
-          </Link>
-          <Link
-            href="/register"
-            className="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition"
-          >
-            Đăng ký
-          </Link>
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+            SellDigital
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Nền tảng bán tài khoản số tự động - Uy tín, An toàn, Nhanh chóng
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Link
+              href="/login"
+              className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+            >
+              Đăng nhập
+            </Link>
+            <Link
+              href="/register"
+              className="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition"
+            >
+              Đăng ký
+            </Link>
+          </div>
         </div>
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="text-4xl mb-4">🔒</div>
             <h3 className="font-semibold text-lg mb-2">An toàn tuyệt đối</h3>
@@ -101,7 +103,7 @@ export default async function HomePage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {latestPosts.map((post) => (
+              {latestPosts.map((post: any) => (
                 <Link key={post.id} href={`/blog/${post.slug}`}>
                   <Card className="h-full hover:shadow-xl transition-shadow bg-white">
                     {post.featuredImage && (
