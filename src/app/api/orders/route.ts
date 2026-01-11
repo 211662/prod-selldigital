@@ -63,9 +63,9 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const totalAmount = product.price * quantity
+    const totalAmount = Number(product.price) * quantity
 
-    if (user.balance < totalAmount) {
+    if (Number(user.balance) < totalAmount) {
       return NextResponse.json(
         { error: "Số dư không đủ" },
         { status: 400 }
@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
           type: "PURCHASE",
           amount: totalAmount,
           balanceBefore: user.balance,
-          balanceAfter: user.balance - totalAmount,
+          balanceAfter: Number(user.balance) - totalAmount,
           status: "COMPLETED",
           note: `Mua ${quantity}x ${product.name}`,
         },

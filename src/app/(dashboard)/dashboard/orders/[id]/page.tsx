@@ -96,7 +96,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
               {new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND',
-              }).format(order.totalAmount)}
+              }).format(Number(order.totalAmount))}
             </p>
           </CardContent>
         </Card>

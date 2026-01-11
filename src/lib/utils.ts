@@ -49,3 +49,9 @@ export function truncate(str: string, length: number) {
 export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+// Format utility object for backward compatibility
+export const format = {
+  currency: formatCurrency,
+  date: formatDate,
+}

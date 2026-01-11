@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { format } from "@/lib/utils"
+import { format as formatDate } from "date-fns"
 
 interface AffiliateData {
   affiliate: {

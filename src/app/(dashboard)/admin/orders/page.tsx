@@ -163,7 +163,7 @@ export default async function AdminOrdersPage() {
                         {new Intl.NumberFormat("vi-VN", {
                           style: "currency",
                           currency: "VND",
-                        }).format(order.totalAmount)}
+                        }).format(Number(order.totalAmount))}
                       </p>
                       <Link href={`/admin/orders/${order.id}`}>
                         <Button variant="outline" size="sm">

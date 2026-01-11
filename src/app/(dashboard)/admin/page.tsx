@@ -48,7 +48,7 @@ export default async function AdminPage() {
       value: new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
-      }).format(totalRevenue._sum.totalAmount || 0),
+      }).format(Number(totalRevenue._sum.totalAmount || 0)),
       icon: DollarSign,
       color: "text-orange-600",
       bg: "bg-orange-50",
@@ -105,7 +105,7 @@ export default async function AdminPage() {
                     {new Intl.NumberFormat('vi-VN', {
                       style: 'currency',
                       currency: 'VND',
-                    }).format(order.totalAmount)}
+                    }).format(Number(order.totalAmount))}
                   </p>
                   <p className="text-sm text-gray-600">{order.status}</p>
                 </div>

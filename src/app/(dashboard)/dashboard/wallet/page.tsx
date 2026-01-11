@@ -75,7 +75,7 @@ export default async function WalletPage() {
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
-              }).format(user?.balance || 0)}
+              }).format(Number(user?.balance || 0))}
             </p>
             <Link href="/dashboard/wallet/deposit">
               <Button className="w-full">
@@ -160,7 +160,7 @@ export default async function WalletPage() {
                         {new Intl.NumberFormat("vi-VN", {
                           style: "currency",
                           currency: "VND",
-                        }).format(tx.amount)}
+                        }).format(Number(tx.amount))}
                       </p>
                       <p className="text-sm text-gray-500">
                         Số dư:{" "}

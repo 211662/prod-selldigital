@@ -111,7 +111,7 @@ export default async function OrdersPage() {
                       {new Intl.NumberFormat('vi-VN', {
                         style: 'currency',
                         currency: 'VND',
-                      }).format(order.totalAmount)}
+                      }).format(Number(order.totalAmount))}
                     </p>
                   </div>
 

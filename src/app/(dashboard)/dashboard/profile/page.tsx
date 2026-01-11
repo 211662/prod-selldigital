@@ -57,7 +57,7 @@ export default async function ProfilePage() {
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                  }).format(user.balance)}
+                  }).format(Number(user.balance))}
                 </p>
               </div>
               <div>

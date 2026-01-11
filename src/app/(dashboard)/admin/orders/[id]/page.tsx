@@ -78,7 +78,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                }).format(order.user.balance)}
+                }).format(Number(order.user.balance))}
               </span>
             </div>
             <div>
@@ -117,7 +117,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                }).format(order.totalAmount)}
+                }).format(Number(order.totalAmount))}
               </span>
             </div>
           </CardContent>
@@ -140,7 +140,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
                         currency: "VND",
-                      }).format(item.price)}
+                      }).format(Number(item.price))}
                     </p>
                   </div>
                   <p className="text-lg font-semibold">

@@ -68,7 +68,7 @@ export default async function AdminProductsPage() {
                         {new Intl.NumberFormat('vi-VN', {
                           style: 'currency',
                           currency: 'VND',
-                        }).format(product.price)}
+                        }).format(Number(product.price))}
                       </span>
                     </div>
                     <div>

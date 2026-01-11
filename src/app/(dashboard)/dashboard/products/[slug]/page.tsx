@@ -78,7 +78,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   {new Intl.NumberFormat('vi-VN', {
                     style: 'currency',
                     currency: 'VND',
-                  }).format(product.price)}
+                  }).format(Number(product.price))}
                 </p>
               </div>
               
@@ -93,13 +93,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   {new Intl.NumberFormat('vi-VN', {
                     style: 'currency',
                     currency: 'VND',
-                  }).format(user?.balance || 0)}
+                  }).format(Number(user?.balance || 0))}
                 </p>
               </div>
 
               <PurchaseForm
-                product={product}
-                userBalance={user?.balance || 0}
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: Number(product.price),
+                  slug: product.slug,
+                }}
+                userBalance={Number(user?.balance || 0)}
                 availableStock={availableStock}
               />
             </CardContent>
