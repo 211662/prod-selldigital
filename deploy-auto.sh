@@ -9,7 +9,7 @@ SERVER_IP="139.59.111.150"
 SERVER_USER="root"
 APP_NAME="selldigital"
 APP_DIR="/var/www/$APP_NAME"
-GIT_REPO="https://github.com/YOUR_USERNAME/prod-selldigital.git"  # UPDATE THIS
+GIT_REPO="https://github.com/211662/prod-selldigital.git"
 
 echo "🚀 Deploying to $SERVER_IP..."
 
