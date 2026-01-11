@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -17,8 +17,26 @@ type RegisterFormData = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
+  const [referralCode, setReferralCode] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Get referral code from URL
+    const ref = searchParams.get("ref")
+    if (ref) {
+      setReferralCode(ref)
+      // Store in localStorage for persistence
+      localStorage.setItem("referralCode", ref)
+    } else {
+      // Check localStorage if no ref in URL
+      const stored = localStorage.getItem("referralCode")
+      if (stored) {
+        setReferralCode(stored)
+      }
+    }
+  }, [searchParams])
 
   const {
     register,
@@ -39,6 +57,7 @@ export default function RegisterPage() {
           name: data.name,
           email: data.email,
           password: data.password,
+          referralCode: referralCode || undefined,
         }),
       })
 
@@ -48,9 +67,14 @@ export default function RegisterPage() {
         throw new Error(result.message || "Đăng ký thất bại")
       }
 
+      // Clear referral code from localStorage
+      localStorage.removeItem("referralCode")
+
       toast({
         title: "Đăng ký thành công",
-        description: "Bạn có thể đăng nhập ngay bây giờ",
+        description: referralCode 
+          ? "Bạn đã nhận được ưu đãi từ người giới thiệu!" 
+          : "Bạn có thể đăng nhập ngay bây giờ",
       })
       
       router.push("/login")
@@ -71,6 +95,11 @@ export default function RegisterPage() {
         <CardTitle className="text-2xl">Đăng ký</CardTitle>
         <CardDescription>
           Tạo tài khoản mới để bắt đầu mua sắm
+          {referralCode && (
+            <span className="block mt-2 text-green-600 font-semibold">
+              🎁 Bạn đang sử dụng mã giới thiệu: {referralCode}
+            </span>
+          )}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>

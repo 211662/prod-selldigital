@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
-import { registerServerSchema } from "@/lib/validations"
+import { registerSchema } from "@/lib/validations"
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     
     // Validate input
-    const validatedData = registerServerSchema.parse(body)
+    const validatedData = registerSchema.parse(body)
     
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -21,29 +21,60 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Check referral code if provided
+    let affiliateId: string | undefined
+    if (body.referralCode) {
+      const affiliate = await prisma.affiliate.findUnique({
+        where: { 
+          code: body.referralCode,
+          isActive: true,
+        },
+      })
+
+      if (affiliate) {
+        affiliateId = affiliate.id
+      }
+    }
     
     // Hash password
     const hashedPassword = await bcrypt.hash(validatedData.password, 10)
     
-    // Create user
-    const user = await prisma.user.create({
-      data: {
-        name: validatedData.name,
-        email: validatedData.email,
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true,
-      },
+    // Create user and referral in a transaction
+    const result = await prisma.$transaction(async (tx: any) => {
+      const user = await tx.user.create({
+        data: {
+          name: validatedData.name,
+          email: validatedData.email,
+          password: hashedPassword,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+        },
+      })
+
+      // Create referral record if affiliate exists
+      if (affiliateId) {
+        await tx.referral.create({
+          data: {
+            affiliateId,
+            userId: user.id,
+            commission: 0, // Will be updated on first purchase
+            status: "PENDING",
+          },
+        })
+      }
+
+      return user
     })
     
     return NextResponse.json(
       {
         message: "Đăng ký thành công",
-        user,
+        user: result,
       },
       { status: 201 }
     )
