@@ -97,11 +97,11 @@ export default async function WalletPage() {
             </div>
             <div>
               <p className="text-gray-600">Số tài khoản:</p>
-              <p className="font-semibold">1234567890</p>
+              <p className="font-semibold">9947756610</p>
             </div>
             <div>
               <p className="text-gray-600">Chủ tài khoản:</p>
-              <p className="font-semibold">NGUYEN VAN A</p>
+              <p className="font-semibold">NGUYEN HONG PHUC</p>
             </div>
             <div>
               <p className="text-gray-600">Nội dung:</p>

@@ -31,11 +31,11 @@ export default async function DepositPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Số tài khoản:</p>
-                <p className="font-semibold text-lg">1234567890</p>
+                <p className="font-semibold text-lg">9947756610</p>
               </div>
               <div>
                 <p className="text-sm text-gray-600">Chủ tài khoản:</p>
-                <p className="font-semibold text-lg">NGUYEN VAN A</p>
+                <p className="font-semibold text-lg">NGUYEN HONG PHUC</p>
               </div>
               <div className="pt-2 border-t">
                 <p className="text-sm text-gray-600">Nội dung chuyển khoản:</p>
