@@ -12,7 +12,7 @@ import { formatDate } from "@/lib/utils"
 async function getLatestPosts() {
   return await prisma.post.findMany({
     where: {
-      published: true,
+      status: "PUBLISHED",
     },
     include: {
       author: {
@@ -23,7 +23,7 @@ async function getLatestPosts() {
       category: true,
     },
     orderBy: {
-      publishedAt: "desc",
+      createdAt: "desc",
     },
     take: 4,
   })
@@ -126,7 +126,7 @@ export default async function HomePage() {
                       <div className="flex items-center gap-3 text-xs text-gray-500">
                         <div className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
-                          {formatDate(new Date(post.publishedAt!))}
+                          {formatDate(new Date(post.createdAt))}
                         </div>
                         <div className="flex items-center gap-1">
                           <Eye className="w-3 h-3" />
