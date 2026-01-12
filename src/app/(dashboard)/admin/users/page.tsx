@@ -21,7 +21,7 @@ export default async function UsersPage() {
       _count: {
         select: {
           orders: true,
-          deposits: true,
+          transactions: true,
         },
       },
     },
@@ -49,7 +49,7 @@ export default async function UsersPage() {
               <TableHead>Tên</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Đơn hàng</TableHead>
-              <TableHead>Nạp tiền</TableHead>
+              <TableHead>Giao dịch</TableHead>
               <TableHead>Ngày tạo</TableHead>
               <TableHead className="text-right">Thao tác</TableHead>
             </TableRow>
@@ -67,7 +67,7 @@ export default async function UsersPage() {
                   </Badge>
                 </TableCell>
                 <TableCell>{user._count.orders}</TableCell>
-                <TableCell>{user._count.deposits}</TableCell>
+                <TableCell>{user._count.transactions}</TableCell>
                 <TableCell>
                   {new Date(user.createdAt).toLocaleDateString("vi-VN")}
                 </TableCell>
