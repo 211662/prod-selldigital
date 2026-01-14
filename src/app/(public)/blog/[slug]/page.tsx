@@ -7,6 +7,63 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, User, Eye, MessageCircle, ArrowLeft } from "lucide-react"
 import { formatDate } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Metadata } from "next"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const post = await prisma.post.findUnique({
+    where: {
+      slug: params.slug,
+      published: true,
+    },
+    select: {
+      title: true,
+      excerpt: true,
+      metaTitle: true,
+      metaDescription: true,
+      metaKeywords: true,
+      featuredImage: true,
+    },
+  })
+
+  if (!post) {
+    return {
+      title: "Bài viết không tồn tại",
+    }
+  }
+
+  return {
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || post.excerpt || undefined,
+    keywords: post.metaKeywords || undefined,
+    openGraph: {
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt || undefined,
+      type: "article",
+      url: `https://taphoammoi.com/blog/${params.slug}`,
+      images: post.featuredImage
+        ? [
+            {
+              url: post.featuredImage,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt || undefined,
+      images: post.featuredImage ? [post.featuredImage] : undefined,
+    },
+  }
+}
+
 
 async function getPost(slug: string) {
   const post = await prisma.post.findUnique({
